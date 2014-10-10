@@ -1,0 +1,46 @@
+package com.funnic.mvc.core.api;
+
+import com.funnic.mvc.core.api.annotations.RequestMethod;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+/**
+ * @author Per
+ */
+public class MethodInfo {
+
+	private final Controller controller;
+	private final Method method;
+	private final RequestMethod requestMethod;
+
+	public MethodInfo(final Controller controller, final Method method, final RequestMethod requestMethod) {
+		this.controller = controller;
+		this.method = method;
+		this.requestMethod = requestMethod;
+	}
+
+	public Controller getController() {
+		return controller;
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public RequestMethod getRequestMethod() {
+		return requestMethod;
+	}
+
+	/**
+	 * Invoke this method
+	 *
+	 * @param params
+	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	public Object invoke(final Object[] params) throws InvocationTargetException, IllegalAccessException {
+		return this.method.invoke(this.controller, params);
+	}
+}

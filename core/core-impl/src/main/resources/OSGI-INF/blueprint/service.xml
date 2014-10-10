@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <bean id="stringConverter" class="com.funnic.mvc.core.impl.converters.StringConverter"/>
+
+    <!-- Bean responsible for converting a parameters into real types -->
+    <bean id="parameterConverters" class="com.funnic.mvc.core.impl.converters.ParameterConvertersImpl">
+        <argument>
+            <list value-type="com.funnic.mvc.core.api.ParameterConverter">
+                <ref component-id="stringConverter"/>
+            </list>
+        </argument>
+    </bean>
+
+    <!-- Connect bundles to the actual templates inside the bundles -->
+    <bean id="bundleTemplateRepository" class="com.funnic.mvc.core.impl.repositories.BundleTemplateRepository"
+          destroy-method="shutdown">
+        <argument ref="blueprintBundleContext"/>
+    </bean>
+
+    <!-- Template repository for local files (i.e. files in the bundles own resources folder) -->
+    <bean id="localTemplateRepository" class="com.funnic.mvc.core.impl.repositories.LocalTemplateRepository"/>
+
+    <!-- Template repository manager, used to resolve a URL based on a template path -->
+    <bean id="templateRepositoryManager" class="com.funnic.mvc.core.impl.repositories.TemplateRepositoryManagerImpl">
+        <argument>
+            <list value-type="com.funnic.mvc.core.api.TemplateRepository">
+                <ref component-id="localTemplateRepository"/>
+                <ref component-id="bundleTemplateRepository"/>
+            </list>
+        </argument>
+    </bean>
+
+    <!-- Listen for Template Repositories registered in the OSGi container -->
+    <reference-list interface="com.funnic.mvc.core.api.TemplateRepository" availability="optional">
+        <reference-listener ref="templateRepositoryManager" bind-method="addTemplateRepository"
+                            unbind-method="removeTemplateRepository"/>
+    </reference-list>
+
+    <bean id="bundleTemplateEngineFactory"
+          class="com.funnic.mvc.core.impl.templating.freemarker.BundleFreemarkerTemplateEngineFactory">
+        <argument ref="templateRepositoryManager"/>
+    </bean>
+
+    <bean id="templateEngine" class="com.funnic.mvc.core.impl.templating.freemarker.FreemarkerTemplateEngine"
+            init-method="initialize" destroy-method="destroy">
+        <argument ref="blueprintBundleContext"/>
+        <argument ref="bundleTemplateEngineFactory"/>
+    </bean>
+
+    <bean id="controllerInfoFactory" class="com.funnic.mvc.core.impl.controllers.ControllerInfoFactoryImpl">
+        <argument ref="parameterConverters"/>
+        <argument ref="templateEngine"/>
+    </bean>
+
+    <bean id="controllerRepository" class="com.funnic.mvc.core.impl.controllers.ControllerRepositoryImpl">
+        <argument ref="controllerInfoFactory"/>
+    </bean>
+
+    <reference-list interface="com.funnic.mvc.core.api.Controller" availability="optional">
+        <reference-listener ref="controllerRepository" bind-method="addController" unbind-method="removeController"/>
+    </reference-list>
+
+    <cm:property-placeholder persistent-id="com.funnic.mvc.core" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="contextPath" value="/demo"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="mvcServlet" class="com.funnic.mvc.core.impl.servlet.MvcServlet">
+        <argument value="${contextPath}"/>
+        <argument ref="controllerRepository"/>
+    </bean>
+
+    <!-- Expose the web servlet -->
+    <service ref="mvcServlet" interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="${contextPath}"/>
+        </service-properties>
+    </service>
+
+</blueprint>
