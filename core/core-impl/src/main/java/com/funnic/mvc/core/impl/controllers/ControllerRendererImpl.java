@@ -11,6 +11,7 @@ import com.funnic.mvc.core.api.renderer.ControllerRenderer;
 import com.funnic.mvc.core.api.templating.TemplateEngineManager;
 import com.funnic.mvc.core.impl.converters.GetParameterConverter;
 import com.funnic.mvc.core.impl.servlet.ServletInfo;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.osgi.framework.Bundle;
@@ -103,27 +104,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 	}
 
 	private Object convert(final Class<?> type, final String parameterValue) {
-		if (boolean.class.isAssignableFrom(type)) {
-			return Boolean.parseBoolean(parameterValue);
-		} else if (char.class.isAssignableFrom(type)) {
-			return parameterValue.charAt(0);
-		} else if (short.class.isAssignableFrom(type)) {
-			return Short.parseShort(parameterValue);
-		} else if (int.class.isAssignableFrom(type)) {
-			return Integer.parseInt(parameterValue);
-		} else if (long.class.isAssignableFrom(type)) {
-			return Long.parseLong(parameterValue);
-		} else if (float.class.isAssignableFrom(type)) {
-			return Float.parseFloat(parameterValue);
-		} else if (double.class.isAssignableFrom(type)) {
-			return Double.parseDouble(parameterValue);
-		}
-
-		final ParameterConverter converter = CollectionUtils.find(converters, new GetParameterConverter(type));
-		if (converter == null)
-			return converter.convert(parameterValue);
-
-		return null;
+		return ConvertUtils.convert(parameterValue, type);
 	}
 
 	private List<Object> resolveParameters(ActionInfo actionInfo, Map<String, Object> parameters) {
@@ -140,7 +121,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 			final String parameterName = getParameterName(paramAnnot[i]);
 			final Object parameterValue = parameters.get(parameterName);
 
-			resolvedParameters.add(parameterValue);
+			resolvedParameters.add(ConvertUtils.convert(parameterValue, type));
 		}
 		return resolvedParameters;
 	}

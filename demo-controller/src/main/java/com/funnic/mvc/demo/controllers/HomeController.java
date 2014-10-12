@@ -24,7 +24,7 @@ public class HomeController extends AbstractController {
 	}
 
 	@RequestMethod
-	public ActionResult index2(@RequestParam("param1") BigDecimal param1,
+	public ActionResult index2(@RequestParam("param1") int param1,
 							   @RequestParam("param2") String param2) {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("param1", param1);
