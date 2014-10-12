@@ -3,6 +3,6 @@
         <title>Index</title>
     </head>
     <body>
-        <h1>HomeController.login? ${loginStatus}</h1>
+        <h1>HomeController.login? ${loginStatus?c}</h1>
     </body>
 </html>

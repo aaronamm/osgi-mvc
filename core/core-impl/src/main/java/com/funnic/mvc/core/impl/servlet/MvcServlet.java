@@ -46,7 +46,7 @@ public class MvcServlet extends HttpServlet {
 			final String controllerName = requestInfo.getControllerName();
 			final String actionName = requestInfo.getActionName();
 
-			controllerRenderer.render(controllerName, actionName, resp.getWriter());
+			controllerRenderer.render(controllerName, actionName, type, resp.getWriter());
 		} catch (IOException e) {
 			log.error("Could not invoke the controller: " + requestInfo.getControllerName(), e);
 			throw new ServletException("Could not handle request", e);

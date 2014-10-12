@@ -3,6 +3,7 @@ package com.funnic.mvc.core.impl.controllers;
 import com.funnic.mvc.core.api.ActionInfo;
 import com.funnic.mvc.core.api.ActionResult;
 import com.funnic.mvc.core.api.ParameterConverter;
+import com.funnic.mvc.core.api.RequestType;
 import com.funnic.mvc.core.api.annotations.RequestParam;
 import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
 import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
@@ -57,9 +58,9 @@ public class ControllerRendererImpl implements ControllerRenderer {
 	}
 
 	@Override
-	public void render(final String controller, final String action, final Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException {
+	public void render(String controller, String action, RequestType type, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException {
 		final ControllerInfo controllerInfo = this.controllerRepository.getController(controller);
-		final ActionInfo actionInfo = controllerInfo.getAction(action);
+		final ActionInfo actionInfo = controllerInfo.getAction(action, type);
 		List<Object> resolvedParameters = resolveParameters(actionInfo);
 
 		try {

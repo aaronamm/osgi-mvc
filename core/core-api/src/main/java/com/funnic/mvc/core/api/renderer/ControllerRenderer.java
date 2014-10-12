@@ -1,5 +1,6 @@
 package com.funnic.mvc.core.api.renderer;
 
+import com.funnic.mvc.core.api.RequestType;
 import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
 import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
 import com.funnic.mvc.core.api.exceptions.RenderException;
@@ -28,9 +29,10 @@ public interface ControllerRenderer {
 	 *
 	 * @param controller
 	 * @param action
+	 * @param type
 	 * @param writer
 	 * @throws ControllerNotFoundException
 	 * @throws ActionNotFoundException
 	 */
-	void render(String controller, String action, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException;
+	void render(String controller, String action, RequestType type, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException;
 }
