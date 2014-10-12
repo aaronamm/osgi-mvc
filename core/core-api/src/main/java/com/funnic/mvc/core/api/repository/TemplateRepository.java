@@ -9,10 +9,9 @@ import org.osgi.framework.Bundle;
 public interface TemplateRepository {
 
 	/**
-	 *
 	 * @param path
 	 * @return
-	*/
+	 */
 	boolean accept(String path);
 
 	/**

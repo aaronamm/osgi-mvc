@@ -7,12 +7,18 @@ import freemarker.template.TemplateDirectiveModel;
  */
 public class HtmlDirective {
 	private final TemplateDirectiveModel render;
+	private final TemplateDirectiveModel href;
 
-	public HtmlDirective(TemplateDirectiveModel render) {
+	public HtmlDirective(final TemplateDirectiveModel render, final TemplateDirectiveModel href) {
 		this.render = render;
+		this.href = href;
 	}
 
 	public TemplateDirectiveModel getRender() {
 		return render;
+	}
+
+	public TemplateDirectiveModel getHref() {
+		return href;
 	}
 }

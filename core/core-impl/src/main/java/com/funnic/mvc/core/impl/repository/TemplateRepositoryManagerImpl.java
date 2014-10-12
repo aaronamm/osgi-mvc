@@ -1,9 +1,9 @@
 package com.funnic.mvc.core.impl.repository;
 
-import com.funnic.mvc.core.api.repository.TemplateRepository;
-import com.funnic.mvc.core.api.repository.TemplateRepositoryManager;
 import com.funnic.mvc.core.api.exceptions.TemplateInfoNotFoundException;
 import com.funnic.mvc.core.api.repository.TemplateInfo;
+import com.funnic.mvc.core.api.repository.TemplateRepository;
+import com.funnic.mvc.core.api.repository.TemplateRepositoryManager;
 import com.funnic.mvc.core.impl.predicates.GetTemplateRepositoryPredicate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.osgi.framework.Bundle;

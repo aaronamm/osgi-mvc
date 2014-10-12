@@ -26,8 +26,8 @@ public class TemplateInfo {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof TemplateInfo) {
-			final TemplateInfo rhs = (TemplateInfo)obj;
+		if (obj instanceof TemplateInfo) {
+			final TemplateInfo rhs = (TemplateInfo) obj;
 			return rhs.getBundle().equals(bundle) && rhs.getUrl().equals(url);
 		}
 		return false;

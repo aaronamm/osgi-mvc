@@ -1,11 +1,9 @@
 package com.funnic.mvc.core.api;
 
 import com.funnic.mvc.core.api.annotations.RequestMethod;
-import com.funnic.mvc.core.api.annotations.RequestParam;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * @author Per

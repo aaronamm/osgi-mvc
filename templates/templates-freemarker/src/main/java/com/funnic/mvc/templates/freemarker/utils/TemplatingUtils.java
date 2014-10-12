@@ -1,7 +1,6 @@
 package com.funnic.mvc.templates.freemarker.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.osgi.framework.Bundle;
 
 /**
  * @author Per

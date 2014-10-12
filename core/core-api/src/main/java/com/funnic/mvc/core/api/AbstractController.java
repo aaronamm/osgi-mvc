@@ -3,7 +3,6 @@ package com.funnic.mvc.core.api;
 import com.funnic.mvc.core.api.annotations.ComponentName;
 import com.funnic.mvc.core.api.annotations.RequestMethod;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;

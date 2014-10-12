@@ -27,12 +27,15 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 
 	private final TemplateRepository templateRepository;
 	private final TemplateDirectiveModel renderDirective;
+	private final TemplateDirectiveModel hrefDirective;
 	private final Configuration cfg;
 	private static ThreadLocal<Stack<Bundle>> currentBundle = new ThreadLocal<Stack<Bundle>>();
 
-	public FreemarkerTemplateEngine(final TemplateRepository templateRepository, final TemplateDirectiveModel renderDirective) {
+	public FreemarkerTemplateEngine(final TemplateRepository templateRepository, final TemplateDirectiveModel renderDirective,
+									final TemplateDirectiveModel hrefDirective) {
 		this.templateRepository = templateRepository;
 		this.renderDirective = renderDirective;
+		this.hrefDirective = hrefDirective;
 
 		cfg = new Configuration();
 		cfg.setIncompatibleImprovements(new freemarker.template.Version(2, 3, 20));
@@ -62,7 +65,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 	public void process(String path, Map<String, Object> models, Writer writer) {
 		try {
 			final Template template = cfg.getTemplate("/" + path);
-			models.put("html", new HtmlDirective(renderDirective));
+			models.put("html", new HtmlDirective(renderDirective, hrefDirective));
 			template.process(models, writer);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Could not process template: " + path, e);
@@ -73,7 +76,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 
 	private static void pushBundle(final Bundle bundle) {
 		Stack<Bundle> stack = currentBundle.get();
-		if(stack == null) {
+		if (stack == null) {
 			stack = new Stack<Bundle>();
 			currentBundle.set(stack);
 		}
@@ -88,7 +91,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 
 	public static Bundle getBundle() {
 		Stack<Bundle> stack = currentBundle.get();
-		if(stack == null) {
+		if (stack == null) {
 			return null;
 		}
 
@@ -103,7 +106,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 			pushBundle(info.getBundle());
 			return new TemplateInfoSource(info);
 		} catch (TemplateInfoNotFoundException e) {
-			log.error("Could not find template info for name: " + path , e);
+			log.error("Could not find template info for name: " + path, e);
 		} catch (IOException e) {
 			log.error("Could not find template info for name: " + path, e);
 		}
@@ -113,17 +116,17 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 
 	@Override
 	public long getLastModified(final Object templateSource) {
-		return ((TemplateInfoSource)templateSource).getLastModified();
+		return ((TemplateInfoSource) templateSource).getLastModified();
 	}
 
 	@Override
 	public Reader getReader(Object templateSource, String encoding) throws IOException {
-		return new InputStreamReader(((TemplateInfoSource)templateSource).getInputStream(), encoding);
+		return new InputStreamReader(((TemplateInfoSource) templateSource).getInputStream(), encoding);
 	}
 
 	@Override
 	public void closeTemplateSource(Object templateSource) throws IOException {
-		((TemplateInfoSource)templateSource).close();
+		((TemplateInfoSource) templateSource).close();
 		popBundle();
 	}
 }

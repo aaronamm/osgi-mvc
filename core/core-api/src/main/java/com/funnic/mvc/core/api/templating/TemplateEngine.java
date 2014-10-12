@@ -3,8 +3,6 @@ package com.funnic.mvc.core.api.templating;
 import org.osgi.framework.Bundle;
 
 import java.io.Writer;
-import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 /**

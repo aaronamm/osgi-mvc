@@ -7,7 +7,6 @@ import com.funnic.mvc.core.api.annotations.RequestMethod;
 import com.funnic.mvc.core.api.annotations.RequestParam;
 import com.funnic.mvc.demo.models.HomeModel;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -10,10 +10,8 @@ import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
 import com.funnic.mvc.core.api.exceptions.RenderException;
 import com.funnic.mvc.core.api.renderer.ControllerRenderer;
 import com.funnic.mvc.core.api.templating.TemplateEngineManager;
-import com.funnic.mvc.core.impl.converters.GetParameterConverter;
 import com.funnic.mvc.core.impl.servlet.ServletInfo;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.osgi.framework.Bundle;
 
@@ -91,7 +89,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 
 		List<Object> parameters = new ArrayList<Object>();
 		int length = paramTypes.length;
-		for(int i = 0; i < length; ++i) {
+		for (int i = 0; i < length; ++i) {
 			final Class<?> type = paramTypes[i];
 
 			final String parameterName = getParameterName(paramAnnot[i]);
@@ -116,7 +114,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 
 		List<Object> resolvedParameters = new ArrayList<Object>();
 		int length = paramTypes.length;
-		for(int i = 0; i < length; ++i) {
+		for (int i = 0; i < length; ++i) {
 			final Class<?> type = paramTypes[i];
 
 			final String parameterName = getParameterName(paramAnnot[i]);
@@ -130,8 +128,8 @@ public class ControllerRendererImpl implements ControllerRenderer {
 	private String getParameterName(Annotation[] annotations) {
 		for (Annotation annotation : annotations) {
 			final Class<?> annotationClass = annotation.getClass();
-			if(RequestParam.class.isAssignableFrom(annotationClass)) {
-				return ((RequestParam)annotation).value();
+			if (RequestParam.class.isAssignableFrom(annotationClass)) {
+				return ((RequestParam) annotation).value();
 			}
 		}
 

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class FreemarkerTemplateRepository implements TemplateRepository, BundleListener {
 	private static final String TEMPLATE_PREFIX = ".ftl";
-	private static final String BUNDLE_PATH_PREFIX= "bundle://";
+	private static final String BUNDLE_PATH_PREFIX = "bundle://";
 
 	private final BundleContext bundleContext;
 	private final List<BundleTemplateEntry> bundleTemplateEntries = new ArrayList<BundleTemplateEntry>();
@@ -44,9 +44,9 @@ public class FreemarkerTemplateRepository implements TemplateRepository, BundleL
 
 	@Override
 	public TemplateInfo getTemplateInfo(Bundle bundle, String path) throws TemplateInfoNotFoundException {
-		if(TemplatingUtils.isLocalPath(path)) {
+		if (TemplatingUtils.isLocalPath(path)) {
 			final URL url = bundle.getEntry(path);
-			if(url == null)
+			if (url == null)
 				throw new TemplateInfoNotFoundException(bundle, path);
 			return new TemplateInfo(url, bundle);
 		}
@@ -110,7 +110,7 @@ public class FreemarkerTemplateRepository implements TemplateRepository, BundleL
 
 	private void addBundle(final Bundle bundle) {
 		final List<URL> entries = getEntries(bundle);
-		if(entries.isEmpty())
+		if (entries.isEmpty())
 			return;
 
 		bundleTemplateEntries.add(new BundleTemplateEntry(bundle, entries));
@@ -118,7 +118,7 @@ public class FreemarkerTemplateRepository implements TemplateRepository, BundleL
 
 	public List<URL> getEntries(final Bundle bundle) {
 		Enumeration<URL> enumeration = bundle.findEntries("/", "*.ftl", true);
-		if(enumeration == null)
+		if (enumeration == null)
 			return new ArrayList<URL>();
 		return EnumerationUtils.toList(enumeration);
 	}

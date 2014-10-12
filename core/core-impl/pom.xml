@@ -95,7 +95,8 @@
                             org.python.core;resolution:=optional,
                             org.python.util;resolution:=optional,
                             org.zeroturnaround.javarebel;resolution:=optional,
-                            *</Import-Package>
+                            *
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>

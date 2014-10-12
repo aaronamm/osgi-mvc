@@ -59,7 +59,7 @@ public class ControllerInfo {
 
 	public ActionInfo getAction(final String action) throws ActionNotFoundException {
 		for (Map.Entry<MethodInfoKey, ActionInfo> entry : accessibleMethods.entrySet()) {
-			if(entry.getKey().getName().equals(action)) {
+			if (entry.getKey().getName().equals(action)) {
 				return entry.getValue();
 			}
 		}
@@ -69,7 +69,7 @@ public class ControllerInfo {
 
 	public ActionInfo getAction(final String action, final RequestType type) throws ActionNotFoundException {
 		ActionInfo actionInfo = accessibleMethods.get(new MethodInfoKey(action, type));
-		if(actionInfo == null)
+		if (actionInfo == null)
 			throw new ActionNotFoundException("Could not find action: " + action);
 
 		return actionInfo;
