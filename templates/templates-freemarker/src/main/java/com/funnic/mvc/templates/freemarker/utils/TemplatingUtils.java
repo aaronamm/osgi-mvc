@@ -1,5 +1,6 @@
 package com.funnic.mvc.templates.freemarker.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Bundle;
 
 /**
@@ -8,7 +9,7 @@ import org.osgi.framework.Bundle;
 public class TemplatingUtils {
 
 	public static boolean matchingBundleName(final String searchForName, final String bundleName) {
-		if (searchForName == null)
+		if (StringUtils.isEmpty(searchForName))
 			return true;
 		return searchForName.equals(bundleName);
 	}

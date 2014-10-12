@@ -28,7 +28,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 	private final TemplateRepository templateRepository;
 	private final TemplateDirectiveModel renderDirective;
 	private final Configuration cfg;
-	private ThreadLocal<Stack<Bundle>> currentBundle = new ThreadLocal<Stack<Bundle>>();
+	private static ThreadLocal<Stack<Bundle>> currentBundle = new ThreadLocal<Stack<Bundle>>();
 
 	public FreemarkerTemplateEngine(final TemplateRepository templateRepository, final TemplateDirectiveModel renderDirective) {
 		this.templateRepository = templateRepository;
@@ -71,7 +71,7 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 		}
 	}
 
-	private void pushBundle(final Bundle bundle) {
+	private static void pushBundle(final Bundle bundle) {
 		Stack<Bundle> stack = currentBundle.get();
 		if(stack == null) {
 			stack = new Stack<Bundle>();
@@ -81,12 +81,12 @@ public class FreemarkerTemplateEngine implements TemplateEngine, TemplateLoader 
 		stack.push(bundle);
 	}
 
-	private void popBundle() {
+	private static void popBundle() {
 		Stack<Bundle> stack = currentBundle.get();
 		stack.pop();
 	}
 
-	private Bundle getBundle() {
+	public static Bundle getBundle() {
 		Stack<Bundle> stack = currentBundle.get();
 		if(stack == null) {
 			return null;

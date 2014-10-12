@@ -12,13 +12,13 @@
         </form>
 
         <!-- Call the HomeController#index method with the supplied parameters and return the result -->
-        <@html.render controller="home" action="index2" params={ "param1" : 10, "param2" : "Hello World!" } />
+        <@html.render controller="home" action="index2" params={ "param1" : 10, "param2" : model.name } />
 
-        <!-- Render the view with the supplied context parameters in this bundle -->
-        <#--<@html.render view="/path/to/view.ftl" params={ "param1" : 10, "param2" : "Hello World!" } /> -->
+        <!-- Call the HomeController#index method with the supplied parameters and return the result -->
+        <@html.render controller="home" action="index3" params={ "model" : model } />
 
         <!-- Render a view located in a bundle within the version range [0, 1) with the supplied context parameters -->
-        <#--<@html.render view="bundle://:[0, 1)/path/to/view.ftl" params={ "param1" : 10, "param2" : "Hello World!" } /> -->
+        <@html.render view="bundle://:[0, 1)/views/global2.ftl" params={ "param1" : 10, "param2" : "Hello World!" } />
 
     </body>
 </html>

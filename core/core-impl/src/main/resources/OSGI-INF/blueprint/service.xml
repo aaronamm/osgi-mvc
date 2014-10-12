@@ -69,5 +69,6 @@
     </service>
 
     <service ref="controllerRenderer" interface="com.funnic.mvc.core.api.renderer.ControllerRenderer" />
+    <service ref="templateEngineManager" interface="com.funnic.mvc.core.api.templating.TemplateEngineManager" />
 
 </blueprint>

@@ -33,6 +33,13 @@ public class HomeController extends AbstractController {
 	}
 
 	@RequestMethod
+	public ActionResult index3(@RequestParam("model") HomeModel model) {
+		Map<String, Object> models = new HashMap<String, Object>();
+		models.put("model", model);
+		return new ActionResult("/views/index3.ftl", models);
+	}
+
+	@RequestMethod
 	public ActionResult global() {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("model", new HomeModel("John Doe"));
