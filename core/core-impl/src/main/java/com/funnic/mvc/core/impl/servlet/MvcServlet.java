@@ -1,8 +1,10 @@
 package com.funnic.mvc.core.impl.servlet;
 
 import com.funnic.mvc.core.api.RequestType;
-import com.funnic.mvc.core.impl.controllers.ControllerInfo;
-import com.funnic.mvc.core.impl.controllers.ControllerRepository;
+import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
+import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
+import com.funnic.mvc.core.api.exceptions.RenderException;
+import com.funnic.mvc.core.api.renderer.ControllerRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +18,14 @@ import java.io.IOException;
  * @author Per
  */
 public class MvcServlet extends HttpServlet {
-
 	private static final Logger log = LoggerFactory.getLogger(MvcServlet.class);
 
 	private final String contextPath;
-	private final ControllerRepository controllerRepository;
+	private final ControllerRenderer controllerRenderer;
 
-	public MvcServlet(final String contextPath, ControllerRepository controllerRepository) {
+	public MvcServlet(final String contextPath, final ControllerRenderer controllerRenderer) {
 		this.contextPath = contextPath;
-		this.controllerRepository = controllerRepository;
+		this.controllerRenderer = controllerRenderer;
 	}
 
 	@Override
@@ -37,21 +38,29 @@ public class MvcServlet extends HttpServlet {
 		doRequest(req, resp, RequestType.GET);
 	}
 
-	private void doRequest(final HttpServletRequest req, final HttpServletResponse resp, final RequestType type) {
+	private void doRequest(final HttpServletRequest req, final HttpServletResponse resp, final RequestType type) throws ServletException {
+		ServletInfo.set(req, resp);
 		final String requestURI = req.getRequestURI().replace(contextPath, "");
 		final RequestInfo requestInfo = new RequestInfo(requestURI);
-
-		final ControllerInfo controllerInfo = controllerRepository.getController(requestInfo.getControllerPath());
-		if (controllerInfo == null) {
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			log.debug("Could not find controller: " + requestInfo.getControllerPath());
-			return;
-		}
-
 		try {
-			controllerInfo.invoke(requestInfo, type, resp.getWriter());
+			final String controllerName = requestInfo.getControllerName();
+			final String actionName = requestInfo.getActionName();
+
+			controllerRenderer.render(controllerName, actionName, resp.getWriter());
 		} catch (IOException e) {
-			log.error("Could not invoke the controller: " + requestInfo.getControllerPath(), e);
+			log.error("Could not invoke the controller: " + requestInfo.getControllerName(), e);
+			throw new ServletException("Could not handle request", e);
+		} catch (ActionNotFoundException e) {
+			log.error("Could not invoke the controller: " + requestInfo.getControllerName(), e);
+			throw new ServletException("Could not handle request", e);
+		} catch (ControllerNotFoundException e) {
+			log.error("Could not invoke the controller: " + requestInfo.getControllerName(), e);
+			throw new ServletException("Could not handle request", e);
+		} catch (RenderException e) {
+			log.error("Could not invoke the controller: " + requestInfo.getControllerName(), e);
+			throw new ServletException("Could not handle request", e);
+		} finally {
+			ServletInfo.clear();
 		}
 	}
 }

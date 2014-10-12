@@ -8,6 +8,8 @@ import org.osgi.framework.ServiceReference;
 public interface ControllerInfoFactory {
 
 	/**
+	 * Create a ControllerInfo instance based on the supplied service reference
+	 *
 	 * @param controllerReference
 	 * @return
 	 */

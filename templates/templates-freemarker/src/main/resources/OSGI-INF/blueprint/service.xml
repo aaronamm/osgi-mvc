@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <reference id="controllerRenderer" interface="com.funnic.mvc.core.api.renderer.ControllerRenderer" />
+
+    <bean id="htmlDirective" class="com.funnic.mvc.templates.freemarker.directive.RenderDirective">
+        <argument ref="controllerRenderer" />
+    </bean>
+
+    <bean id="templateRepository" class="com.funnic.mvc.templates.freemarker.repository.FreemarkerTemplateRepository"
+            destroy-method="destroy">
+        <argument ref="blueprintBundleContext" />
+    </bean>
+
+    <bean id="templateEngine" class="com.funnic.mvc.templates.freemarker.FreemarkerTemplateEngine">
+        <argument ref="templateRepository" />
+        <argument ref="htmlDirective" />
+    </bean>
+
+    <service ref="templateEngine" interface="com.funnic.mvc.core.api.templating.TemplateEngine" />
+    <service ref="templateRepository" interface="com.funnic.mvc.core.api.repository.TemplateRepository" />
+
+</blueprint>

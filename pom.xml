@@ -39,6 +39,7 @@
         <module>parent</module>
         <module>demo-controller</module>
         <module>demo-views</module>
+        <module>templates</module>
     </modules>
 
 </project>

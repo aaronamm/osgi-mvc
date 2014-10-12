@@ -16,6 +16,7 @@
 
     <modules>
         <module>core-api</module>
+        <module>core-spi</module>
         <module>core-impl</module>
     </modules>
 

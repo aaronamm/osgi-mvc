@@ -15,11 +15,11 @@ import java.lang.annotation.Target;
 public @interface RequestMethod {
 
 	/**
-	 * The relative path of the method. If not set then the path becomes the same as the name of the method
+	 * The relative name of the method. If not set then the name becomes the same as the name of the method
 	 *
-	 * @return The path to the method
+	 * @return The name to the method
 	 */
-	String path() default "";
+	String name() default "";
 
 	/**
 	 * Requests that this method can handle

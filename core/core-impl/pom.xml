@@ -9,7 +9,6 @@
         <relativePath>../../parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.funnic.mvc.core</groupId>
     <artifactId>core-impl</artifactId>
     <packaging>bundle</packaging>
@@ -18,6 +17,11 @@
         <dependency>
             <groupId>com.funnic.mvc.core</groupId>
             <artifactId>core-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.funnic.mvc.core</groupId>
+            <artifactId>core-spi</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -64,7 +68,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Embed-Dependency>commons-lang3,commons-collections4,org.apache.servicemix.bundles.freemarker</Embed-Dependency>
+                        <Embed-Dependency>org.apache.servicemix.bundles.freemarker</Embed-Dependency>
                         <Import-Package>com.sun.org.apache.xml.internal.utils;resolution:=optional,
                             com.sun.org.apache.xpath.internal;resolution:=optional,
                             com.sun.org.apache.xpath.internal.objects;resolution:=optional,

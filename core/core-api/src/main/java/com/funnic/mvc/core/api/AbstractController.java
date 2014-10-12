@@ -1,8 +1,9 @@
 package com.funnic.mvc.core.api;
 
-import com.funnic.mvc.core.api.annotations.Path;
+import com.funnic.mvc.core.api.annotations.ComponentName;
 import com.funnic.mvc.core.api.annotations.RequestMethod;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -13,17 +14,17 @@ import java.util.List;
  */
 public abstract class AbstractController implements Controller {
 
-	private final String rootPath;
-	private final List<MethodInfo> accessibleMethods = new ArrayList<MethodInfo>();
+	private final String controllerName;
+	private final List<ActionInfo> actions = new ArrayList<ActionInfo>();
 
 	public AbstractController() {
-		Path path = getClass().getAnnotation(Path.class);
-		if (path != null)
-			rootPath = path.value();
+		ComponentName componentName = getClass().getAnnotation(ComponentName.class);
+		if (componentName != null)
+			controllerName = componentName.name();
 		else {
 			String className = getClass().getSimpleName();
 			int idx = className.lastIndexOf(".");
-			rootPath = className.substring(idx + 1);
+			controllerName = className.substring(idx + 1).replace("Controller", "").toLowerCase();
 		}
 
 		Method[] methods = getClass().getMethods();
@@ -39,18 +40,18 @@ public abstract class AbstractController implements Controller {
 			if (!returnType.isAssignableFrom(ActionResult.class))
 				continue;
 
-			MethodInfo methodInfo = new MethodInfo(this, method, requestMethod);
-			accessibleMethods.add(methodInfo);
+			ActionInfo actionInfo = new ActionInfo(this, method, requestMethod);
+			actions.add(actionInfo);
 		}
 	}
 
 	@Override
-	public String getRootPath() {
-		return rootPath;
+	public String getControllerName() {
+		return controllerName;
 	}
 
 	@Override
-	public List<MethodInfo> getAccessibleMethods() {
-		return accessibleMethods;
+	public List<ActionInfo> getActions() {
+		return actions;
 	}
 }

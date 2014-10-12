@@ -1,6 +1,5 @@
 package com.funnic.mvc.core.api;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -9,16 +8,16 @@ import java.util.List;
 public interface Controller {
 
 	/**
-	 * Retrieves this controllers root-path
+	 * Retrieves this controllers root-name
 	 *
-	 * @return The controller root path
+	 * @return The controller root name
 	 */
-	String getRootPath();
+	String getControllerName();
 
 	/**
 	 * Retrieves the methods accessible by the mvc framework
 	 *
 	 * @return All methods accessible by the mvc framework
 	 */
-	List<MethodInfo> getAccessibleMethods();
+	List<ActionInfo> getActions();
 }

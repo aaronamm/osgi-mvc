@@ -7,30 +7,33 @@ import org.apache.commons.lang3.Validate;
  * @author Per
  */
 public class MethodInfoKey {
-	private final String path;
+	private final String name;
 	private final RequestType requestType;
 
-	public MethodInfoKey(String path, RequestType requestType) {
-		Validate.notEmpty(path, "Parameter 'path' cannot be null or empty");
+	public MethodInfoKey(String name, RequestType requestType) {
+		Validate.notEmpty(name, "Parameter 'name' cannot be null or empty");
 		Validate.notNull(requestType, "Parameter 'requestType' cannot be null");
-		this.path = path;
+		this.name = name;
 		this.requestType = requestType;
-
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof MethodInfoKey) {
 			MethodInfoKey rhs = (MethodInfoKey) obj;
-			return rhs.path.equals(path) && rhs.requestType.equals(requestType);
+			return rhs.name.equals(name) && rhs.requestType.equals(requestType);
 		}
 		return super.equals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = path.hashCode();
+		int result = name.hashCode();
 		result = 31 * result + requestType.hashCode();
 		return result;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

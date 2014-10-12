@@ -1,17 +1,14 @@
 package com.funnic.mvc.core.impl.controllers;
 
-import com.funnic.mvc.core.api.*;
-import com.funnic.mvc.core.impl.converters.ParameterConverters;
-import com.funnic.mvc.core.impl.exceptions.ControllerMethodNotFound;
-import com.funnic.mvc.core.impl.exceptions.CouldNotInvokeMethodException;
-import com.funnic.mvc.core.impl.servlet.RequestInfo;
+import com.funnic.mvc.core.api.ActionInfo;
+import com.funnic.mvc.core.api.Controller;
+import com.funnic.mvc.core.api.RequestType;
+import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import java.io.Writer;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,27 +20,22 @@ public class ControllerInfo {
 	private final Bundle bundle;
 	private final Controller controller;
 	private final ServiceReference serviceReference;
-	private final ParameterConverters parameterConverters;
-	private final TemplateEngine templateEngine;
-	private Map<MethodInfoKey, MethodInfo> accessibleMethods = new HashMap<MethodInfoKey, MethodInfo>();
+	private Map<MethodInfoKey, ActionInfo> accessibleMethods = new HashMap<MethodInfoKey, ActionInfo>();
 
-	public ControllerInfo(BundleContext bundleContext, final Controller controller, final ServiceReference serviceReference,
-						  final ParameterConverters parameterConverters, final TemplateEngine templateEngine) {
+	public ControllerInfo(BundleContext bundleContext, final Controller controller, final ServiceReference serviceReference) {
 		this.bundleContext = bundleContext;
 		this.bundle = bundleContext.getBundle();
 		this.controller = controller;
 		this.serviceReference = serviceReference;
-		this.parameterConverters = parameterConverters;
-		this.templateEngine = templateEngine;
-		for (final MethodInfo methodInfo : controller.getAccessibleMethods()) {
-			RequestType[] types = methodInfo.getRequestMethod().types();
+		for (final ActionInfo actionInfo : controller.getActions()) {
+			RequestType[] types = actionInfo.getRequestMethod().types();
 			if (types.length == 0)
 				types = new RequestType[]{RequestType.GET, RequestType.POST};
 
-			final String path = StringUtils.defaultIfEmpty(methodInfo.getRequestMethod().path(),
-					"/" + methodInfo.getMethod().getName());
+			final String actionName = StringUtils.defaultIfEmpty(actionInfo.getRequestMethod().name(),
+					actionInfo.getMethod().getName());
 			for (final RequestType type : types) {
-				accessibleMethods.put(new MethodInfoKey(path, type), methodInfo);
+				accessibleMethods.put(new MethodInfoKey(actionName, type), actionInfo);
 			}
 		}
 	}
@@ -54,28 +46,32 @@ public class ControllerInfo {
 	}
 
 	public String getRootPath() {
-		return controller.getRootPath();
+		return controller.getControllerName();
 	}
 
 	public void destroy() {
 		bundleContext.ungetService(serviceReference);
 	}
 
-	public void invoke(final RequestInfo requestInfo, final RequestType type, final Writer writer) {
-		final String methodPath = requestInfo.getMethodPath();
-		final String[] parameters = requestInfo.getParameters();
+	public Bundle getBundle() {
+		return bundle;
+	}
 
-		final MethodInfo methodInfo = accessibleMethods.get(new MethodInfoKey(methodPath, type));
-		if (methodInfo == null)
-			throw new ControllerMethodNotFound("Method: '" + methodPath + "' receiving type: " + type + " is not found");
-
-		final Method methodToInvoke = methodInfo.getMethod();
-		final Object[] realParameters = parameterConverters.convert(parameters, methodToInvoke.getParameterTypes());
-		try {
-			final ActionResult result = (ActionResult) methodInfo.invoke(realParameters);
-			templateEngine.process(bundle, result.getView(), result.getModels(), writer);
-		} catch (Exception e) {
-			throw new CouldNotInvokeMethodException("Error while invoking method: '" + methodPath + "' receiving type: " + type, e);
+	public ActionInfo getAction(final String action) throws ActionNotFoundException {
+		for (Map.Entry<MethodInfoKey, ActionInfo> entry : accessibleMethods.entrySet()) {
+			if(entry.getKey().getName().equals(action)) {
+				return entry.getValue();
+			}
 		}
+
+		throw new ActionNotFoundException("Could not find action: " + action);
+	}
+
+	public ActionInfo getAction(final String action, final RequestType type) throws ActionNotFoundException {
+		ActionInfo actionInfo = accessibleMethods.get(new MethodInfoKey(action, type));
+		if(actionInfo == null)
+			throw new ActionNotFoundException("Could not find action: " + action);
+
+		return actionInfo;
 	}
 }

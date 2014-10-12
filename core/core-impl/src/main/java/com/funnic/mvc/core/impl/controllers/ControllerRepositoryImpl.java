@@ -1,5 +1,6 @@
 package com.funnic.mvc.core.impl.controllers;
 
+import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
 import com.funnic.mvc.core.impl.predicates.ControllerFromServiceReferencePredicate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.osgi.framework.ServiceReference;
@@ -21,10 +22,10 @@ public class ControllerRepositoryImpl implements ControllerRepository {
 	}
 
 	@Override
-	public ControllerInfo getController(final String path) {
-		ControllerInfo info = controllers.get(path);
+	public ControllerInfo getController(final String name) throws ControllerNotFoundException {
+		ControllerInfo info = controllers.get(name);
 		if (info == null)
-			return null;
+			throw new ControllerNotFoundException("Could not find controller: " + name);
 
 		return info;
 	}

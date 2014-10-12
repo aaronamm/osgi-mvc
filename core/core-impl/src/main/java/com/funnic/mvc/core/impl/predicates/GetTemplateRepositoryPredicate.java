@@ -1,6 +1,6 @@
 package com.funnic.mvc.core.impl.predicates;
 
-import com.funnic.mvc.core.api.TemplateRepository;
+import com.funnic.mvc.core.api.repository.TemplateRepository;
 import org.apache.commons.collections4.Predicate;
 
 /**
@@ -16,6 +16,6 @@ public class GetTemplateRepositoryPredicate implements Predicate<TemplateReposit
 
 	@Override
 	public boolean evaluate(TemplateRepository object) {
-		return path.startsWith(object.getPrefix());
+		return object.accept(path);
 	}
 }

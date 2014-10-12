@@ -15,9 +15,8 @@ public class RequestInfoTest {
 
 		final RequestInfo unitToTest = new RequestInfo(input);
 
-		assertEquals("/home", unitToTest.getControllerPath());
-		assertEquals("/index", unitToTest.getMethodPath());
-		assertEquals(0, unitToTest.getParameters().length);
+		assertEquals("home", unitToTest.getControllerName());
+		assertEquals("index", unitToTest.getActionName());
 	}
 
 	@Test
@@ -26,9 +25,8 @@ public class RequestInfoTest {
 
 		final RequestInfo unitToTest = new RequestInfo(input);
 
-		assertEquals("/controllerPath", unitToTest.getControllerPath());
-		assertEquals("/index", unitToTest.getMethodPath());
-		assertEquals(0, unitToTest.getParameters().length);
+		assertEquals("controllerPath", unitToTest.getControllerName());
+		assertEquals("index", unitToTest.getActionName());
 	}
 
 	@Test
@@ -37,9 +35,8 @@ public class RequestInfoTest {
 
 		final RequestInfo unitToTest = new RequestInfo(input);
 
-		assertEquals("/controllerPath", unitToTest.getControllerPath());
-		assertEquals("/methodPath", unitToTest.getMethodPath());
-		assertEquals(0, unitToTest.getParameters().length);
+		assertEquals("controllerPath", unitToTest.getControllerName());
+		assertEquals("methodPath", unitToTest.getActionName());
 	}
 
 	@Test
@@ -48,10 +45,7 @@ public class RequestInfoTest {
 
 		final RequestInfo unitToTest = new RequestInfo(input);
 
-		assertEquals("/controllerPath", unitToTest.getControllerPath());
-		assertEquals("/methodPath", unitToTest.getMethodPath());
-		assertEquals(2, unitToTest.getParameters().length);
-		assertEquals("p1", unitToTest.getParameters()[0]);
-		assertEquals("p2", unitToTest.getParameters()[1]);
+		assertEquals("controllerPath", unitToTest.getControllerName());
+		assertEquals("methodPath", unitToTest.getActionName());
 	}
 }
