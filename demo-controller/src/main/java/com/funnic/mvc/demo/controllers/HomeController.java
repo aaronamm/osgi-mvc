@@ -56,6 +56,6 @@ public class HomeController extends AbstractController {
 
 	@RequestMethod
 	public ActionResult logout() {
-		return RedirectToAction("index");
+		return ForwardToAction("index");
 	}
 }

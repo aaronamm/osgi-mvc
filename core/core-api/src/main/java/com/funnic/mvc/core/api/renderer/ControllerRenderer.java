@@ -19,10 +19,11 @@ public interface ControllerRenderer {
 	 * @param action The action we want to render
 	 * @param parameters The parameters to the action
 	 * @param writer Where the result is written to
-	 * @throws ControllerNotFoundException
-	 * @throws ActionNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.ControllerNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.ActionNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.RenderException
 	 */
-	void render(String controller, String action, Map<String, Object> parameters, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException;
+	void render(String controller, String action, Map<String, Object> parameters, Writer writer);
 
 	/**
 	 * Render an action on a controller. All parameters are resolved using the built-in parameter resolver. The result is then put into the writer instance
@@ -31,8 +32,9 @@ public interface ControllerRenderer {
 	 * @param action The action we want to render
 	 * @param type The type of the request
 	 * @param writer Where the result is written to
-	 * @throws ControllerNotFoundException
-	 * @throws ActionNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.ControllerNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.ActionNotFoundException
+	 * @throws com.funnic.mvc.core.api.exceptions.RenderException
 	 */
-	void render(String controller, String action, RequestType type, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException;
+	void render(String controller, String action, RequestType type, Writer writer);
 }

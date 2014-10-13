@@ -3,7 +3,7 @@ package com.funnic.mvc.core.api.exceptions;
 /**
  * @author Per
  */
-public class RenderException extends Exception {
+public class RenderException extends RuntimeException {
 	public RenderException(final String message) {
 		super(message);
 	}

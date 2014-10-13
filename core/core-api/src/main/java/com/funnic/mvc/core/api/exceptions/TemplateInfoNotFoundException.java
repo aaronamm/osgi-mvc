@@ -5,7 +5,7 @@ import org.osgi.framework.Bundle;
 /**
  * @author Per
  */
-public class TemplateInfoNotFoundException extends Exception {
+public class TemplateInfoNotFoundException extends RuntimeException {
 	private final Bundle bundle;
 	private final String path;
 

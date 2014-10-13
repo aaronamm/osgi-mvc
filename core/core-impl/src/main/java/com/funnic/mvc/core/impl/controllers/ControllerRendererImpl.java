@@ -46,7 +46,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 	}
 
 	@Override
-	public void render(final String controller, final String action, final Map<String, Object> parameters, final Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException {
+	public void render(final String controller, final String action, final Map<String, Object> parameters, final Writer writer) {
 		final ControllerInfo controllerInfo = this.controllerRepository.getController(controller);
 		final ActionInfo actionInfo = controllerInfo.getAction(action);
 		List<Object> resolvedParameters = resolveParameters(actionInfo, parameters);
@@ -63,7 +63,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 	}
 
 	@Override
-	public void render(String controller, String action, RequestType type, Writer writer) throws ControllerNotFoundException, ActionNotFoundException, RenderException {
+	public void render(String controller, String action, RequestType type, Writer writer) {
 		final ControllerInfo controllerInfo = this.controllerRepository.getController(controller);
 		final ActionInfo actionInfo = controllerInfo.getAction(action, type);
 		List<Object> resolvedParameters = resolveParameters(actionInfo);
@@ -79,7 +79,8 @@ public class ControllerRendererImpl implements ControllerRenderer {
 		}
 	}
 
-	private void processAction(Bundle bundle, ActionInfo action, Object[] parameters, final Writer writer) throws InvocationTargetException, IllegalAccessException, IOException {
+	private void processAction(Bundle bundle, ActionInfo action, Object[] parameters, final Writer writer) throws
+			InvocationTargetException, IllegalAccessException, IOException {
 		final ActionResult result = (ActionResult) action.invoke(parameters);
 		if(result instanceof RenderViewResult) {
 			final RenderViewResult view = (RenderViewResult)result;
@@ -93,7 +94,7 @@ public class ControllerRendererImpl implements ControllerRenderer {
 		} else if(result instanceof ForwardToActionResult) {
 			final ForwardToActionResult forward = (ForwardToActionResult)result;
 			final String controller = StringUtils.defaultString(forward.getController(), action.getController().getControllerName());
-			//render(controller, forward.getAction(), )
+			render(controller, forward.getAction(), forward.getParameters(), writer);
 		}
 	}
 

@@ -112,13 +112,36 @@ public abstract class AbstractController implements Controller {
 	}
 
 	/**
+	 * Tell the MVC framework to forward to the supplied action in this controller
+	 *
+	 * @param action The name of the action
+	 * @param parameters Parameters to the forwarded action
+	 * @return
+	 */
+	protected ActionResult ForwardToAction(final String action, final Map<String, Object> parameters) {
+		return new ForwardToActionResult(action, parameters);
+	}
+
+	/**
 	 * Tell the MVC framework to forward to the supplied action in the supplied controller
 	 *
 	 * @param action The name of the action
-	 * @param controller
+	 * @param controller The controller
 	 * @return
 	 */
 	protected ActionResult ForwardToAction(final String action, final String controller) {
 		return new ForwardToActionResult(action, controller);
+	}
+
+	/**
+	 * Tell the MVC framework to forward to the supplied action in the supplied controller
+	 *
+	 * @param action The name of the action
+	 * @param controller The controller
+	 * @param parameters Parameters to the forwarded action
+	 * @return
+	 */
+	protected ActionResult ForwardToAction(final String action, final String controller, final Map<String, Object> parameters) {
+		return new ForwardToActionResult(action, controller, parameters);
 	}
 }
