@@ -18,4 +18,13 @@ public interface TemplateEngineManager {
 	 * @param writer Where the result is written to
 	 */
 	void process(final Bundle bundle, final String path, final Map<String, Object> models, final Writer writer);
+
+	/**
+	 * Process the supplied template name with the given models and put the result into the writer
+	 *
+	 * @param path   The name to the template file
+	 * @param models The models we want to use in the template file
+	 * @param writer Where the result is written to
+	 */
+	void process(String path, Map<String, Object> models, Writer writer);
 }

@@ -1,4 +1,4 @@
-package com.funnic.mvc.core.api;
+package com.funnic.mvc.core.api.actions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,15 +6,15 @@ import java.util.Map;
 /**
  * @author Per
  */
-public class ActionResult {
+public class RenderViewResult extends ActionResult {
 	private final String view;
 	private Map<String, Object> models;
 
-	public ActionResult(String view) {
+	public RenderViewResult(final String view) {
 		this.view = view;
 	}
 
-	public ActionResult(String view, Map<String, Object> models) {
+	public RenderViewResult(final String view, final Map<String, Object> models) {
 		this.view = view;
 		this.models = models;
 	}

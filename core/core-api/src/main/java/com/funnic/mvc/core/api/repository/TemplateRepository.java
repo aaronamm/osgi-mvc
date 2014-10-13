@@ -9,8 +9,10 @@ import org.osgi.framework.Bundle;
 public interface TemplateRepository {
 
 	/**
-	 * @param path
-	 * @return
+	 * Check if this repository can handle the a file with the supplied path
+	 *
+	 * @param path The path to the template file
+	 * @return TRUE if this repository can handle the supplied path; FALSE otherwise
 	 */
 	boolean accept(String path);
 

@@ -41,23 +41,11 @@
         <argument value="${contextPath}"/>
     </bean>
 
-    <bean id="stringConverter" class="com.funnic.mvc.core.impl.converters.StringConverter"/>
-    <bean id="bigDecimalConverter" class="com.funnic.mvc.core.impl.converters.BigDecimalConverter"/>
-
     <bean id="controllerRenderer" class="com.funnic.mvc.core.impl.controllers.ControllerRendererImpl">
         <argument ref="controllerRepository"/>
         <argument ref="templateEngineManager"/>
-        <argument>
-            <list value-type="com.funnic.mvc.core.api.ParameterConverter">
-                <ref component-id="stringConverter"/>
-                <ref component-id="bigDecimalConverter"/>
-            </list>
-        </argument>
+        <argument ref="linkBuilder" />
     </bean>
-
-    <reference-list interface="com.funnic.mvc.core.api.ParameterConverter" availability="optional">
-        <reference-listener ref="controllerRenderer" bind-method="addConverter" unbind-method="removeConverter"/>
-    </reference-list>
 
     <bean id="mvcServlet" class="com.funnic.mvc.core.impl.servlet.MvcServlet">
         <argument value="${contextPath}"/>
@@ -74,5 +62,6 @@
     <service ref="linkBuilder" interface="com.funnic.mvc.core.api.LinkBuilder" />
     <service ref="controllerRenderer" interface="com.funnic.mvc.core.api.renderer.ControllerRenderer"/>
     <service ref="templateEngineManager" interface="com.funnic.mvc.core.api.templating.TemplateEngineManager"/>
+    <service ref="templateRepositoryManager" interface="com.funnic.mvc.core.api.repository.TemplateRepositoryManager"/>
 
 </blueprint>

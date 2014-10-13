@@ -7,7 +7,6 @@ import org.apache.commons.collections4.Predicate;
  * @author Per
  */
 public class GetTemplateRepositoryPredicate implements Predicate<TemplateRepository> {
-
 	private final String path;
 
 	public GetTemplateRepositoryPredicate(String path) {

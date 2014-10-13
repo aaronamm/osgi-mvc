@@ -43,7 +43,7 @@ public class RenderDirective implements TemplateDirectiveModel {
 			}
 			final String view = ((TemplateScalarModel) viewModel).getAsString();
 			Map<String, Object> actionParams = getUnwrappedMap(env, paramsModel);
-			templateEngineManager.process(FreemarkerTemplateEngine.getBundle(), view, actionParams, env.getOut());
+			templateEngineManager.process(view, actionParams, env.getOut());
 			return;
 		}
 

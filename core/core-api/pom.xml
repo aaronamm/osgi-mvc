@@ -9,7 +9,6 @@
         <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.funnic.mvc.core</groupId>
     <artifactId>core-api</artifactId>
     <packaging>bundle</packaging>

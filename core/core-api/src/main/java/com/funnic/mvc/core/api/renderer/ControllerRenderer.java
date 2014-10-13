@@ -15,10 +15,10 @@ public interface ControllerRenderer {
 	/**
 	 * Render an action on a controller with the given parameters. Put the result into the writer instance
 	 *
-	 * @param controller
-	 * @param action
-	 * @param parameters
-	 * @param writer
+	 * @param controller The controller we want to render
+	 * @param action The action we want to render
+	 * @param parameters The parameters to the action
+	 * @param writer Where the result is written to
 	 * @throws ControllerNotFoundException
 	 * @throws ActionNotFoundException
 	 */
@@ -27,10 +27,10 @@ public interface ControllerRenderer {
 	/**
 	 * Render an action on a controller. All parameters are resolved using the built-in parameter resolver. The result is then put into the writer instance
 	 *
-	 * @param controller
-	 * @param action
-	 * @param type
-	 * @param writer
+	 * @param controller The controller we want to render
+	 * @param action The action we want to render
+	 * @param type The type of the request
+	 * @param writer Where the result is written to
 	 * @throws ControllerNotFoundException
 	 * @throws ActionNotFoundException
 	 */

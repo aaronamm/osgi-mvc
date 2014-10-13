@@ -1,9 +1,12 @@
 package com.funnic.mvc.core.impl.controllers;
 
 import com.funnic.mvc.core.api.ActionInfo;
-import com.funnic.mvc.core.api.ActionResult;
-import com.funnic.mvc.core.api.ParameterConverter;
+import com.funnic.mvc.core.api.LinkBuilder;
 import com.funnic.mvc.core.api.RequestType;
+import com.funnic.mvc.core.api.actions.ActionResult;
+import com.funnic.mvc.core.api.actions.ForwardToActionResult;
+import com.funnic.mvc.core.api.actions.RediectToActionResult;
+import com.funnic.mvc.core.api.actions.RenderViewResult;
 import com.funnic.mvc.core.api.annotations.RequestParam;
 import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
 import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
@@ -12,10 +15,13 @@ import com.funnic.mvc.core.api.renderer.ControllerRenderer;
 import com.funnic.mvc.core.api.templating.TemplateEngineManager;
 import com.funnic.mvc.core.impl.servlet.ServletInfo;
 import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.osgi.framework.Bundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -31,13 +37,12 @@ public class ControllerRendererImpl implements ControllerRenderer {
 
 	private final ControllerRepository controllerRepository;
 	private final TemplateEngineManager templateEngine;
-	private List<ParameterConverter> converters = new ArrayList<ParameterConverter>();
+	private final LinkBuilder linkBuilder;
 
-	public ControllerRendererImpl(final ControllerRepository controllerRepository, final TemplateEngineManager templateEngine,
-								  final List<ParameterConverter> converters) {
+	public ControllerRendererImpl(final ControllerRepository controllerRepository, final TemplateEngineManager templateEngine, final LinkBuilder linkBuilder) {
 		this.controllerRepository = controllerRepository;
 		this.templateEngine = templateEngine;
-		this.converters.addAll(converters);
+		this.linkBuilder = linkBuilder;
 	}
 
 	@Override
@@ -51,6 +56,8 @@ public class ControllerRendererImpl implements ControllerRenderer {
 		} catch (InvocationTargetException e) {
 			throw new RenderException("Could not render action: " + controller + "." + action, e);
 		} catch (IllegalAccessException e) {
+			throw new RenderException("Could not render action: " + controller + "." + action, e);
+		} catch (IOException e) {
 			throw new RenderException("Could not render action: " + controller + "." + action, e);
 		}
 	}
@@ -67,12 +74,27 @@ public class ControllerRendererImpl implements ControllerRenderer {
 			throw new RenderException("Could not render action: " + controller + "." + action, e);
 		} catch (IllegalAccessException e) {
 			throw new RenderException("Could not render action: " + controller + "." + action, e);
+		} catch (IOException e) {
+			throw new RenderException("Could not render action: " + controller + "." + action, e);
 		}
 	}
 
-	private void processAction(Bundle bundle, ActionInfo action, Object[] parameters, final Writer writer) throws InvocationTargetException, IllegalAccessException {
+	private void processAction(Bundle bundle, ActionInfo action, Object[] parameters, final Writer writer) throws InvocationTargetException, IllegalAccessException, IOException {
 		final ActionResult result = (ActionResult) action.invoke(parameters);
-		templateEngine.process(bundle, result.getView(), result.getModels(), writer);
+		if(result instanceof RenderViewResult) {
+			final RenderViewResult view = (RenderViewResult)result;
+			templateEngine.process(bundle, view.getView(), view.getModels(), writer);
+		} else if (result instanceof RediectToActionResult) {
+			final RediectToActionResult redirect = (RediectToActionResult)result;
+			final String controller = StringUtils.defaultString(redirect.getController(), action.getController().getControllerName());
+			final HttpServletResponse response = ServletInfo.getResponse();
+			final String href = linkBuilder.getHref(controller, redirect.getAction());
+			response.sendRedirect(href);
+		} else if(result instanceof ForwardToActionResult) {
+			final ForwardToActionResult forward = (ForwardToActionResult)result;
+			final String controller = StringUtils.defaultString(forward.getController(), action.getController().getControllerName());
+			//render(controller, forward.getAction(), )
+		}
 	}
 
 	private List<Object> resolveParameters(ActionInfo actionInfo) {
@@ -134,14 +156,6 @@ public class ControllerRendererImpl implements ControllerRenderer {
 		}
 
 		throw new IllegalStateException("Could not resolve parameter name");
-	}
-
-	public void addConverter(final ParameterConverter converter) {
-		converters.add(converter);
-	}
-
-	public void removeConverter(final ParameterConverter converter) {
-		converters.remove(converter);
 	}
 }
 

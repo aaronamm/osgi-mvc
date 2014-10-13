@@ -1,4 +1,4 @@
-package com.funnic.mvc.core.impl.templating.predicates;
+package com.funnic.mvc.core.impl.predicates;
 
 import com.funnic.mvc.core.api.templating.TemplateEngine;
 import org.apache.commons.collections4.Predicate;

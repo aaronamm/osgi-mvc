@@ -1,7 +1,7 @@
 package com.funnic.mvc.demo.controllers;
 
 import com.funnic.mvc.core.api.AbstractController;
-import com.funnic.mvc.core.api.ActionResult;
+import com.funnic.mvc.core.api.actions.ActionResult;
 import com.funnic.mvc.core.api.RequestType;
 import com.funnic.mvc.core.api.annotations.RequestMethod;
 import com.funnic.mvc.core.api.annotations.RequestParam;
@@ -19,7 +19,7 @@ public class HomeController extends AbstractController {
 	public ActionResult index() {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("model", new HomeModel("John Doe"));
-		return new ActionResult("/views/index.ftl", models);
+		return View("/views/index.ftl", models);
 	}
 
 	@RequestMethod
@@ -28,21 +28,21 @@ public class HomeController extends AbstractController {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("param1", param1);
 		models.put("param2", param2);
-		return new ActionResult("/views/index2.ftl", models);
+		return View("/views/index2.ftl", models);
 	}
 
 	@RequestMethod
 	public ActionResult index3(@RequestParam("model") HomeModel model) {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("model", model);
-		return new ActionResult("/views/index3.ftl", models);
+		return View("/views/index3.ftl", models);
 	}
 
 	@RequestMethod
 	public ActionResult global() {
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("model", new HomeModel("John Doe"));
-		return new ActionResult("bundle://:/views/global.ftl", models);
+		return View("bundle://:/views/global.ftl", models);
 	}
 
 	@RequestMethod(types = RequestType.POST)
@@ -51,6 +51,11 @@ public class HomeController extends AbstractController {
 		boolean loginOk = "admin".equals(username) && "pass".equals(password);
 		Map<String, Object> models = new HashMap<String, Object>();
 		models.put("loginStatus", loginOk);
-		return new ActionResult("/views/login.ftl", models);
+		return View("/views/login.ftl", models);
+	}
+
+	@RequestMethod
+	public ActionResult logout() {
+		return RedirectToAction("index");
 	}
 }
