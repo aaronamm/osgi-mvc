@@ -3,6 +3,8 @@ package com.funnic.mvc.core.api.exceptions;
 import org.osgi.framework.Bundle;
 
 /**
+ * Exception thrown if template info is not found
+ *
  * @author Per
  */
 public class TemplateInfoNotFoundException extends RuntimeException {

@@ -12,9 +12,9 @@
     <groupId>com.funnic.mvc</groupId>
     <artifactId>templates-reactor</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>templates-freemarker</module>
     </modules>
-
 
 </project>

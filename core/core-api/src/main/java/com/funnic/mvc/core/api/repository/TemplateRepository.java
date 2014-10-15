@@ -7,7 +7,6 @@ import org.osgi.framework.Bundle;
  * @author Per
  */
 public interface TemplateRepository {
-
 	/**
 	 * Check if this repository can handle the a file with the supplied path
 	 *

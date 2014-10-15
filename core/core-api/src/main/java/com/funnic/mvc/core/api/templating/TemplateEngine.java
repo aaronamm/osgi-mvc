@@ -9,12 +9,11 @@ import java.util.Map;
  * @author Per
  */
 public interface TemplateEngine {
-
 	/**
 	 * Check if this template engine can handle the supplied file name
 	 *
 	 * @param path The name to the template file
-	 * @return
+	 * @return TRUE if this template engine can handle the supplied file name; FALSE otherwise
 	 */
 	boolean accept(String path);
 
