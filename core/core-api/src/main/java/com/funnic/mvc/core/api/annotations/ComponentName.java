@@ -14,5 +14,5 @@ public @interface ComponentName {
 	/**
 	 * @return
 	 */
-	String name();
+	String value();
 }

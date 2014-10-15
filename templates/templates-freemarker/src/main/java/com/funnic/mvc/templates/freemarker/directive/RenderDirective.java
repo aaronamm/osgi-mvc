@@ -2,7 +2,6 @@ package com.funnic.mvc.templates.freemarker.directive;
 
 import com.funnic.mvc.core.api.renderer.ControllerRenderer;
 import com.funnic.mvc.core.api.templating.TemplateEngineManager;
-import com.funnic.mvc.templates.freemarker.FreemarkerTemplateEngine;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import freemarker.template.utility.DeepUnwrap;

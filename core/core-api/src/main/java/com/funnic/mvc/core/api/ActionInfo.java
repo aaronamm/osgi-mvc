@@ -1,7 +1,5 @@
 package com.funnic.mvc.core.api;
 
-import com.funnic.mvc.core.api.annotations.RequestMethod;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -11,12 +9,14 @@ import java.lang.reflect.Method;
 public class ActionInfo {
 	private final Controller controller;
 	private final Method method;
-	private final RequestMethod requestMethod;
+	private final String name;
+	private final RequestType[] requestTypes;
 
-	public ActionInfo(final Controller controller, final Method method, final RequestMethod requestMethod) {
+	public ActionInfo(final Controller controller, final Method method, final String name, final RequestType[] requestTypes) {
 		this.controller = controller;
 		this.method = method;
-		this.requestMethod = requestMethod;
+		this.name = name;
+		this.requestTypes = requestTypes;
 	}
 
 	public Controller getController() {
@@ -27,10 +27,13 @@ public class ActionInfo {
 		return method;
 	}
 
-	public RequestMethod getRequestMethod() {
-		return requestMethod;
+	public String getName() {
+		return name;
 	}
 
+	public RequestType[] getRequestTypes() {
+		return requestTypes;
+	}
 	/**
 	 * Invoke this method
 	 *

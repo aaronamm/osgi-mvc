@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RequestMethod {
+public @interface Action {
 
 	/**
 	 * The relative name of the method. If not set then the name becomes the same as the name of the method

@@ -2,10 +2,10 @@ package com.funnic.mvc.core.api;
 
 import com.funnic.mvc.core.api.actions.ActionResult;
 import com.funnic.mvc.core.api.actions.ForwardToActionResult;
-import com.funnic.mvc.core.api.annotations.ComponentName;
-import com.funnic.mvc.core.api.annotations.RequestMethod;
 import com.funnic.mvc.core.api.actions.RediectToActionResult;
 import com.funnic.mvc.core.api.actions.RenderViewResult;
+import com.funnic.mvc.core.api.annotations.Action;
+import com.funnic.mvc.core.api.utils.ControllerUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -22,29 +22,21 @@ public abstract class AbstractController implements Controller {
 	private final List<ActionInfo> actions = new ArrayList<ActionInfo>();
 
 	public AbstractController() {
-		ComponentName componentName = getClass().getAnnotation(ComponentName.class);
-		if (componentName != null)
-			controllerName = componentName.name();
-		else {
-			String className = getClass().getSimpleName();
-			int idx = className.lastIndexOf(".");
-			controllerName = className.substring(idx + 1).replace("Controller", "").toLowerCase();
-		}
+		controllerName = ControllerUtils.getControllerName(getClass());
 
-		Method[] methods = getClass().getMethods();
+		final Method[] methods = getClass().getMethods();
 		for (Method method : methods) {
 			if (!Modifier.isPublic(method.getModifiers()))
-				continue;
-
-			final RequestMethod requestMethod = method.getAnnotation(RequestMethod.class);
-			if (requestMethod == null)
 				continue;
 
 			final Class<?> returnType = method.getReturnType();
 			if (!returnType.isAssignableFrom(ActionResult.class))
 				continue;
 
-			ActionInfo actionInfo = new ActionInfo(this, method, requestMethod);
+			final Action actionAttribute = method.getAnnotation(Action.class);
+			final String name = actionAttribute != null ? actionAttribute.name().toLowerCase() : method.getName().toLowerCase();
+			final RequestType[] requestTypes = actionAttribute != null ? actionAttribute.types() : new RequestType[] { RequestType.GET, RequestType.POST };
+			ActionInfo actionInfo = new ActionInfo(this, method, name.isEmpty() ? method.getName().toLowerCase() : name, requestTypes);
 			actions.add(actionInfo);
 		}
 	}

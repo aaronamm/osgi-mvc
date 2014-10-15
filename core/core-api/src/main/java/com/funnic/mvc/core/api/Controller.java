@@ -8,7 +8,7 @@ import java.util.List;
 public interface Controller {
 
 	/**
-	 * Retrieves this controllers root-name
+	 * Retrieves the name of this controller
 	 *
 	 * @return The controller root name
 	 */

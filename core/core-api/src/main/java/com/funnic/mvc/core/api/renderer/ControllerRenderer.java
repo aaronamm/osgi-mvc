@@ -1,9 +1,6 @@
 package com.funnic.mvc.core.api.renderer;
 
 import com.funnic.mvc.core.api.RequestType;
-import com.funnic.mvc.core.api.exceptions.ActionNotFoundException;
-import com.funnic.mvc.core.api.exceptions.ControllerNotFoundException;
-import com.funnic.mvc.core.api.exceptions.RenderException;
 
 import java.io.Writer;
 import java.util.Map;

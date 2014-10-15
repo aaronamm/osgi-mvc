@@ -28,12 +28,8 @@ public class ControllerInfo {
 		this.controller = controller;
 		this.serviceReference = serviceReference;
 		for (final ActionInfo actionInfo : controller.getActions()) {
-			RequestType[] types = actionInfo.getRequestMethod().types();
-			if (types.length == 0)
-				types = new RequestType[]{RequestType.GET, RequestType.POST};
-
-			final String actionName = StringUtils.defaultIfEmpty(actionInfo.getRequestMethod().name(),
-					actionInfo.getMethod().getName());
+			final RequestType[] types = actionInfo.getRequestTypes();
+			final String actionName = actionInfo.getName();
 			for (final RequestType type : types) {
 				accessibleMethods.put(new MethodInfoKey(actionName, type), actionInfo);
 			}
