@@ -3,9 +3,9 @@
     <title>Index</title>
 </head>
 <body>
-<h1>Example1</h1>
+<h1>Example3</h1>
 
-<div>${greeting}</div>
+/views/home.ftl rendered by the example5-controller
 
 </body>
 </html>

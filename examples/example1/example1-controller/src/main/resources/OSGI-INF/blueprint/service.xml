@@ -3,9 +3,9 @@
            xmlns:mvc="http://www.github.com/perandersson/osgi-mvc/schemas/mvc"
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <bean id="controller" class="com.funnic.mvc.examples.example1.Example1Controller" />
+    <bean id="controller" class="com.funnic.mvc.examples.example1.Example1Controller"/>
 
     <!-- Create and expose the example1 controller -->
-    <mvc:controller ref="controller" category="examples" />
+    <mvc:controller ref="controller" category="examples"/>
 
 </blueprint>

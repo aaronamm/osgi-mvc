@@ -15,10 +15,10 @@ import java.util.Map;
 public class Example2Controller extends AbstractController {
 
 	public ActionResult index() {
-		Map<String,Object> models = new HashMap<>();
+		Map<String, Object> models = new HashMap<>();
 		final boolean loggedIn = isLoggedIn();
 		models.put("loggedIn", loggedIn);
-		if(loggedIn) {
+		if (loggedIn) {
 			models.put("user", new UserModel("John Doe"));
 		}
 		return View("/views/index.ftl", models);

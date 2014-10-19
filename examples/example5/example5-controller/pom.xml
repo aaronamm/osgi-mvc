@@ -3,26 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.funnic.mvc</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>com.funnic.mvc.examples</groupId>
+        <artifactId>example5-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../parent/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.funnic.mvc.core</groupId>
-    <artifactId>core-spi</artifactId>
+    <groupId>com.funnic.mvc.examples.example5</groupId>
+    <artifactId>example5-controller</artifactId>
     <packaging>bundle</packaging>
 
+
     <dependencies>
+        <dependency>
+            <groupId>com.funnic.mvc.core</groupId>
+            <artifactId>core-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
             <version>4.2.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 
@@ -38,5 +40,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

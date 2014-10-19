@@ -1,7 +1,7 @@
 package com.funnic.mvc.core.impl.view.predicate;
 
+import com.funnic.mvc.core.impl.VersionRange;
 import com.funnic.mvc.core.impl.view.ViewRepository;
-import com.funnic.mvc.core.spi.VersionRange;
 import org.apache.commons.collections4.Predicate;
 
 /**
