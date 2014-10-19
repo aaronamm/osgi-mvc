@@ -40,6 +40,7 @@
         <module>example3</module>
         <module>example4</module>
         <module>example5</module>
+        <module>examples-controller</module>
     </modules>
 
 </project>

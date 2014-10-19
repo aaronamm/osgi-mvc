@@ -1,11 +1,11 @@
 <html>
-<head>
-    <title>Index</title>
-</head>
-<body>
-<h1>Example1</h1>
+    <head>
+        <title>Index</title>
+    </head>
+    <body>
+        <h1>Example1</h1>
 
-<div>${greeting}</div>
+        <div>${greeting}</div>
 
-</body>
+    </body>
 </html>

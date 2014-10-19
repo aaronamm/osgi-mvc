@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -56,7 +57,6 @@ public class NSHandler implements NamespaceHandler {
 		if(CONTROLLER_NAME.equals(elementName)) {
 			final String ref = element.getAttribute("ref");
 			final String defaultAction = element.getAttribute("defaultAction");
-			final String category = element.getAttribute("category");
 			final String name = element.getAttribute("name");
 
 			final MutableServiceMetadata service = pc.createMetadata(MutableServiceMetadata.class);
@@ -68,10 +68,7 @@ public class NSHandler implements NamespaceHandler {
 			if (StringUtils.isNotEmpty(defaultAction)) {
 				service.addServiceProperty(createValue(pc, "mvc.controller.defaultAction"), createValue(pc, defaultAction));
 			}
-			if (StringUtils.isNotEmpty(defaultAction)) {
-				service.addServiceProperty(createValue(pc, "mvc.controller.category"), createValue(pc, category));
-			}
-
+			addServiceProperties(pc, service, element);
 			final MutableRefMetadata serviceRef = pc.createMetadata(MutableRefMetadata.class);
 			serviceRef.setComponentId(ref);
 			service.setServiceComponent(serviceRef);
@@ -105,6 +102,39 @@ public class NSHandler implements NamespaceHandler {
 
 		throw new UnsupportedOperationException("Invalid operation: " + element.toString());
 	}
+
+	private void addServiceProperties(final ParserContext pc, final MutableServiceMetadata service, final Element element) {
+		final Element serviceProperties = getServiceProperties(element);
+		if(serviceProperties == null)
+			return;
+		final NodeList childNodes = serviceProperties.getChildNodes();
+		for(int i = 0; i < childNodes.getLength(); ++i) {
+			Node node = childNodes.item(i);
+			if(!nodeNameEquals(node, "entry"))
+				continue;
+
+			final Element entry = (Element)node;
+			final String key = entry.getAttribute("key");
+			final String value = entry.getAttribute("value");
+			service.addServiceProperty(createValue(pc, key), createValue(pc, value));
+		}
+	}
+
+	private Element getServiceProperties(final Element element) {
+		final NodeList childNodes = element.getChildNodes();
+		for(int i = 0; i < childNodes.getLength(); ++i) {
+			final Node node = childNodes.item(i);
+			if(nodeNameEquals(node, "service-properties")) {
+				return (Element)node;
+			}
+		}
+		return null;
+	}
+
+	private static boolean nodeNameEquals(final Node node, final String name) {
+		return (name.equals(node.getNodeName()) || name.equals(node.getLocalName()));
+	}
+
 
 	private RefMetadata getOrCreateViewRepositoryFactory(final ParserContext pc) {
 		if(!pc.getComponentDefinitionRegistry().containsComponentDefinition(MVC_VIEW_REPOSITORY_FACTORY)) {

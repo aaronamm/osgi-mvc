@@ -5,7 +5,16 @@
 
     <bean id="controller" class="com.funnic.mvc.examples.example1.Example1Controller"/>
 
-    <!-- Create and expose the example1 controller -->
-    <mvc:controller ref="controller" category="examples"/>
+    <!-- Create and expose the example5 controller -->
+    <mvc:controller ref="controller" defaultAction="home">
+        <!--
+            If we want service properties for our exposed controller.
+            This is useful if we want to have other controllers or services listening for controllers of certain
+            properties (in this case we have the main "examples" page listing all example controllers).
+        -->
+        <mvc:service-properties>
+            <mvc:entry key="category" value="example"/>
+        </mvc:service-properties>
+    </mvc:controller>
 
 </blueprint>

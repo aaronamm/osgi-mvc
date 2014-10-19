@@ -35,7 +35,37 @@
         <xsd:sequence minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="requestType" type="TrequestType"/>
         </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="name" type="xsd:normalizedString" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="TservicePropertyEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[
+                TservicePropertyEntry is an entry value used for the <service-properties>
+                element.  This does not allow a child <key> element and there are no
+                key-ref or value-ref attributes.
+                ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="key" type="xsd:normalizedString" use="required" />
+        <xsd:attribute name="value" type="xsd:normalizedString" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="TserviceProperties">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[
+                TserviceProperty is used for <service-properties> elements.
+                The syntax is similar to what is defined for <map>, but keys must be
+                string values and there are no type defaults that can be specified.
+                created from the entry elements, which require a key/value pair.
+                ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="entry" type="TservicePropertyEntry" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="Tcontroller">
@@ -46,6 +76,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element minOccurs="0" name="action" type="Taction"/>
+            <xsd:element minOccurs="0" maxOccurs="1" name="service-properties" type="TserviceProperties"/>
         </xsd:sequence>
         <xsd:attribute name="ref" type="beans:Tidref">
             <xsd:annotation>
@@ -54,26 +85,18 @@
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:attribute name="name" type="xsd:string" use="optional">
+        <xsd:attribute name="name" type="xsd:normalizedString" use="optional">
             <xsd:annotation>
                 <xsd:documentation>
                     Name of the controller. If nothing is specified then it will try to deduce it from the class name.
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:attribute name="defaultAction" type="xsd:string" use="optional" default="index">
+        <xsd:attribute name="defaultAction" type="xsd:normalizedString" use="optional" default="index">
             <xsd:annotation>
                 <xsd:documentation>
                     Default action if no action method is supplied to the controller.
                     The default value is "index"
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="category" type="xsd:string" use="optional">
-            <xsd:annotation>
-                <xsd:documentation>
-                    Attribute used to categorize controllers together. Can also be used when querying the MVC framework
-                    for all active controllers.
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
@@ -85,8 +108,8 @@
                 This is used to specify which files are represented as views
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="path" type="xsd:string" use="required"/>
-        <xsd:attribute name="filePattern" type="xsd:string" use="optional"/>
+        <xsd:attribute name="path" type="xsd:normalizedString" use="required"/>
+        <xsd:attribute name="filePattern" type="xsd:normalizedString" use="optional"/>
     </xsd:complexType>
 
     <xsd:complexType name="Tresource">
@@ -95,25 +118,24 @@
                 This is used to specify which resources are exposed from this bundle
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="include" type="xsd:string" use="required"/>
-        <xsd:attribute name="exclude" type="xsd:string" use="optional"/>
+        <xsd:attribute name="path" type="xsd:normalizedString" use="required"/>
+        <xsd:attribute name="filePattern" type="xsd:normalizedString" use="optional"/>
     </xsd:complexType>
 
     <xsd:complexType name="Troute">
         <xsd:annotation>
             <xsd:documentation>
                 This specifies how requests are routed for this bundles controllers. If no routes are declared
-                then the default behaviour is in effect: {category}/{controller}/{action}
+                then the default behaviour is in effect: "{controller}/{action}"
 
                 The following wildcard names are reserved for the MVC framework:
 
-                {category} = The category name
                 {controller} = The controller name
                 {action} = The action name
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="url" type="xsd:string" use="required"/>
+        <xsd:attribute name="name" type="xsd:normalizedString" use="required"/>
+        <xsd:attribute name="url" type="xsd:normalizedString" use="required"/>
     </xsd:complexType>
 
     <xsd:element name="view" type="Tview"/>

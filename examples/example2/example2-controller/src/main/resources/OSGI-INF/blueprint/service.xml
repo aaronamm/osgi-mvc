@@ -6,6 +6,6 @@
     <bean id="controller" class="com.funnic.mvc.examples.example2.Example2Controller"/>
 
     <!-- Create and expose the example2 controller -->
-    <mvc:controller ref="controller" category="examples"/>
+    <mvc:controller ref="controller"/>
 
 </blueprint>
