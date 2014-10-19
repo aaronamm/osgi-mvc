@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+    <!-- Template manager used to get a single-point entry method for processing template files -->
+    <bean id="templateEngineManager" class="com.funnic.mvc.core.impl.templating.TemplateEngineManagerImpl"/>
+
+    <!-- Listen for Template Engines registered in the OSGi container -->
+    <reference-list interface="com.funnic.mvc.core.api.templating.TemplateEngine" availability="optional">
+        <reference-listener ref="templateEngineManager" bind-method="addTemplateEngine"
+                            unbind-method="removeTemplateEngine"/>
+    </reference-list>
+
+    <bean id="controllerInfoFactory" class="com.funnic.mvc.core.impl.controllers.ControllerInfoFactoryImpl"/>
+
+    <bean id="controllerRepository" class="com.funnic.mvc.core.impl.controllers.ControllerRepositoryImpl">
+        <argument ref="controllerInfoFactory"/>
+    </bean>
+
+    <reference-list interface="com.funnic.mvc.core.api.Controller" availability="optional">
+        <reference-listener ref="controllerRepository" bind-method="addController" unbind-method="removeController"/>
+    </reference-list>
+
+    <cm:property-placeholder persistent-id="com.funnic.mvc.core" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="contextPath" value="/demo"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="linkBuilder" class="com.funnic.mvc.core.impl.LinkBuilderImpl">
+        <argument value="${contextPath}"/>
+    </bean>
+
+    <bean id="controllerRenderer" class="com.funnic.mvc.core.impl.controllers.ControllerRendererImpl">
+        <argument ref="controllerRepository"/>
+        <argument ref="templateEngineManager"/>
+        <argument ref="linkBuilder"/>
+    </bean>
+
+    <bean id="mvcServlet" class="com.funnic.mvc.core.impl.servlet.MvcServlet">
+        <argument value="${contextPath}"/>
+        <argument ref="controllerRenderer"/>
+    </bean>
+
+    <!-- Expose the web servlet -->
+    <service ref="mvcServlet" interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="${contextPath}"/>
+        </service-properties>
+    </service>
+
+    <service ref="linkBuilder" interface="com.funnic.mvc.core.api.LinkBuilder"/>
+    <service ref="controllerRenderer" interface="com.funnic.mvc.core.api.renderer.ControllerRenderer"/>
+    <service ref="templateEngineManager" interface="com.funnic.mvc.core.api.templating.TemplateEngineManager"/>
+
+    <service interface="com.funnic.mvc.core.api.view.ViewRepositoryFactory">
+        <bean class="com.funnic.mvc.core.impl.view.ViewRepositoryFactoryImpl" />
+    </service>
+
+    <bean id="viewRepositoryManager" class="com.funnic.mvc.core.impl.view.ViewRepositoryManagerImpl">
+        <argument ref="blueprintBundle" />
+    </bean>
+
+    <reference-list interface="java.util.List" filter="mvc.views=true" availability="optional">
+        <reference-listener ref="viewRepositoryManager" bind-method="registerViews" unbind-method="unregisterViews"/>
+    </reference-list>
+
+    <service ref="viewRepositoryManager" interface="com.funnic.mvc.core.api.view.ViewRepositoryManager" />
+
+</blueprint>

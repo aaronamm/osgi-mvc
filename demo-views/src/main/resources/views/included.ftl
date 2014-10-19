@@ -1,1 +1,0 @@
-<div>From include.ftl</div>

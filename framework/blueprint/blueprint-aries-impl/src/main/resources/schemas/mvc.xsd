@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.github.com/perandersson/osgi-mvc/schemas/mvc"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+            targetNamespace="http://www.github.com/perandersson/osgi-mvc/schemas/mvc"
+            elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0.0">
+
+    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+                schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation>
+            This schema defines beans representing the MVC core features.
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:simpleType name="TrequestType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the request type
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="GET"/>
+            <xsd:enumeration value="POST"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Taction">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies an action to be exposed on a controller
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="requestType" type="TrequestType"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tcontroller">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is used to specify a controller
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="action" type="Taction"/>
+        </xsd:sequence>
+        <xsd:attribute name="ref" type="beans:Tidref">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Reference to a controller instance
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Name of the controller. If nothing is specified then it will try to deduce it from the class name.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="defaultAction" type="xsd:string" use="optional" default="index">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Default action if no action method is supplied to the controller.
+                    The default value is "index"
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="category" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Attribute used to categorize controllers together. Can also be used when querying the MVC framework
+                    for all active controllers.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tview">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is used to specify which files are represented as views
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="path" type="xsd:string" use="required"/>
+        <xsd:attribute name="filePattern" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tresource">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is used to specify which resources are exposed from this bundle
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="include" type="xsd:string" use="required"/>
+        <xsd:attribute name="exclude" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Troute">
+        <xsd:annotation>
+            <xsd:documentation>
+                This specifies how requests are routed for this bundles controllers. If no routes are declared
+                then the default behaviour is in effect: {category}/{controller}/{action}
+
+                The following wildcard names are reserved for the MVC framework:
+
+                {category} = The category name
+                {controller} = The controller name
+                {action} = The action name
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:element name="view" type="Tview"/>
+    <xsd:element name="controller" type="Tcontroller"/>
+    <xsd:element name="route" type="Troute"/>
+
+</xsd:schema>
